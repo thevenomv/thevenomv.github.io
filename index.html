@@ -4,16 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>thevenomv | Software & Tools</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         /* Base Variables & Theme */
         :root {
-            --bg-color: #0b0f19;
-            --card-bg: #111827;
-            --text-main: #f3f4f6;
-            --text-muted: #9ca3af;
+            --bg-base: #050505;
+            --grid-color: rgba(0, 255, 204, 0.03);
+            --card-bg: rgba(15, 20, 25, 0.8);
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
             --accent-blue: #3b82f6;
             --accent-neon: #00ffcc;
         }
@@ -25,32 +27,52 @@
         }
 
         body {
-            background-color: var(--bg-color);
+            background-color: var(--bg-base);
+            /* The Personalized Grid Background */
+            background-image: 
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 30px 30px;
+            background-position: center center;
+            
             color: var(--text-main);
-            font-family: 'Inter', sans-serif;
+            font-family: 'Space Grotesk', sans-serif;
             line-height: 1.6;
             overflow-x: hidden;
+            position: relative;
         }
 
-        /* Container & Grid */
+        /* Subtle glowing orb in the background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -20%;
+            left: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: radial-gradient(circle, rgba(59,130,246,0.1) 0%, rgba(0,0,0,0) 70%);
+            z-index: -1;
+        }
+
         .container {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 0 2rem;
         }
 
         /* Hero Section */
         header {
-            padding: 100px 0 60px;
+            padding: 120px 0 60px;
             text-align: left;
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
         .hero-title {
-            font-size: 3.5rem;
+            font-size: 4rem;
             font-weight: 700;
-            letter-spacing: -1px;
+            letter-spacing: -2px;
             margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(0, 255, 204, 0.2);
         }
 
         .hero-title span {
@@ -58,7 +80,7 @@
         }
 
         .hero-subtitle {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: 'Fira Code', monospace;
             color: var(--text-muted);
             font-size: 1.1rem;
             margin-bottom: 30px;
@@ -66,104 +88,129 @@
 
         .social-links a {
             color: var(--text-main);
-            font-size: 1.5rem;
-            margin-right: 20px;
-            transition: color 0.3s ease;
+            font-size: 1.8rem;
+            margin-right: 25px;
+            transition: all 0.3s ease;
         }
 
         .social-links a:hover {
             color: var(--accent-neon);
+            text-shadow: 0 0 10px var(--accent-neon);
+            transform: translateY(-3px);
         }
 
-        /* Featured Project Section */
+        /* Projects Section */
         .projects-section {
             padding: 80px 0;
         }
 
         .section-header {
-            font-size: 1.5rem;
-            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.8rem;
+            font-family: 'Fira Code', monospace;
             color: var(--accent-blue);
-            margin-bottom: 40px;
+            margin-bottom: 50px;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
         }
 
         .section-header::after {
             content: "";
             flex-grow: 1;
             height: 1px;
-            background: rgba(255,255,255,0.1);
+            background: linear-gradient(90deg, rgba(59,130,246,0.5) 0%, transparent 100%);
         }
 
-        /* Project Card */
+        /* The Grid Layout for Multiple Projects */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            max-width: 900px; /* Constrains the width so 2 items don't stretch too far */
+        }
+
+        /* Individual Project Cards */
         .project-card {
             background-color: var(--card-bg);
+            backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.05);
+            border-top: 1px solid rgba(255,255,255,0.1);
             border-radius: 12px;
-            padding: 40px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
         }
 
+        /* Card Hover Glow Effect */
         .project-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 255, 204, 0.05);
-            border-color: rgba(0, 255, 204, 0.2);
+            transform: translateY(-10px);
+            border-color: rgba(0, 255, 204, 0.3);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 255, 204, 0.1);
         }
 
-        .project-content h3 {
-            font-size: 2rem;
+        .project-card h3 {
+            font-size: 1.6rem;
             margin-bottom: 15px;
+            color: #fff;
         }
 
-        .project-content p {
+        .project-card p {
             color: var(--text-muted);
             margin-bottom: 25px;
+            flex-grow: 1;
+            font-size: 0.95rem;
         }
 
         .tech-stack {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 30px;
+            gap: 8px;
+            margin-bottom: 25px;
         }
 
         .tech-pill {
-            background: rgba(59, 130, 246, 0.1);
-            color: var(--accent-blue);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-            padding: 5px 12px;
-            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--accent-neon);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 4px;
+            border: 1px solid rgba(0, 255, 204, 0.2);
         }
 
         .project-links {
             display: flex;
             gap: 15px;
+            margin-top: auto;
         }
 
         .btn {
-            padding: 10px 24px;
+            padding: 8px 16px;
             border-radius: 6px;
             font-weight: 500;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
             text-decoration: none;
             transition: all 0.2s ease;
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            cursor: pointer;
         }
 
         .btn-primary {
-            background-color: var(--accent-blue);
-            color: #fff;
+            background-color: rgba(59, 130, 246, 0.1);
+            color: var(--accent-blue);
+            border: 1px solid var(--accent-blue);
         }
 
         .btn-primary:hover {
-            background-color: #2563eb;
+            background-color: var(--accent-blue);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
         }
 
         .btn-outline {
@@ -174,42 +221,25 @@
 
         .btn-outline:hover {
             border-color: var(--text-main);
-        }
-
-        /* Placeholder for your awesome UI screenshot */
-        .project-image-container {
-            width: 100%;
-            height: 300px;
-            background: linear-gradient(145deg, #1e293b, #0f172a);
-            border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.05);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            font-family: 'JetBrains Mono', monospace;
-            position: relative;
-            overflow: hidden;
+            background-color: rgba(255,255,255,0.05);
         }
         
-        /* If you add an image, it will fill this container */
-        .project-image-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        /* Special Ribbon for Flagship Project */
+        .flagship-ribbon {
             position: absolute;
-            top: 0;
-            left: 0;
+            top: 15px;
+            right: -35px;
+            background: var(--accent-neon);
+            color: #000;
+            padding: 5px 40px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            transform: rotate(45deg);
+            font-family: 'Fira Code', monospace;
         }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
-            .project-card {
-                grid-template-columns: 1fr;
-            }
-            .hero-title {
-                font-size: 2.5rem;
-            }
+            .hero-title { font-size: 3rem; }
         }
     </style>
 </head>
@@ -218,20 +248,21 @@
     <div class="container">
         <header>
             <h1 class="hero-title">thevenomv<span>.</span></h1>
-            <p class="hero-subtitle">> I write code. Building highly useful tools.</p>
+            <p class="hero-subtitle">> Initializing workspace...<br>> Systems engineer & tool builder.</p>
             <div class="social-links">
                 <a href="https://github.com/thevenomv" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
-                <a href="mailto:your.email@example.com" title="Email"><i class="fas fa-envelope"></i></a>
             </div>
         </header>
 
         <main class="projects-section">
-            <h2 class="section-header">Featured Engineering</h2>
+            <h2 class="section-header"><i class="fas fa-terminal"></i> Public Repositories</h2>
 
-            <div class="project-card">
-                <div class="project-content">
+            <div class="project-grid">
+                
+                <div class="project-card">
+                    <div class="flagship-ribbon">FLAGSHIP</div>
                     <h3>FT8 Global Matrix</h3>
-                    <p>A high-performance Windows dashboard engineered for amateur radio operators. Visualizes live FT8, FT4, and WSPR activity on a dual 2D/3D map matrix with real-time NOAA space weather integration and complex data clustering.</p>
+                    <p>A high-performance Windows desktop dashboard engineered for amateur radio operators. Features a dual 2D/3D map rendering engine, live PSKReporter tracking, and real-time NOAA space weather integration.</p>
                     
                     <div class="tech-stack">
                         <span class="tech-pill">Python</span>
@@ -242,18 +273,31 @@
 
                     <div class="project-links">
                         <a href="https://github.com/thevenomv/WSPR--FT8-Global-Matrix/releases" class="btn btn-primary" target="_blank">
-                            <i class="fas fa-download"></i> Download .exe
+                            <i class="fas fa-download"></i> .exe
                         </a>
                         <a href="https://github.com/thevenomv/WSPR--FT8-Global-Matrix" class="btn btn-outline" target="_blank">
-                            <i class="fab fa-github"></i> Source Code
+                            <i class="fab fa-github"></i> Source
                         </a>
                     </div>
                 </div>
 
-                <div class="project-image-container">
-                    <i class="fas fa-globe-americas" style="font-size: 3rem; margin-bottom: 10px; color: #00ffcc; opacity: 0.5;"></i>
-                    <div style="position: absolute; bottom: 20px; font-size: 0.8rem;">[ Replace with App Screenshot ]</div>
+                <div class="project-card">
+                    <h3>OrbitRx Propagation Monitor</h3>
+                    <p>A specialized tracking and monitoring tool built to analyze radio propagation data. Designed to pull localized telemetry and provide actionable insights for frequency conditions.</p>
+                    
+                    <div class="tech-stack">
+                        <span class="tech-pill">Python</span>
+                        <span class="tech-pill">API Integration</span>
+                        <span class="tech-pill">Data Vis</span>
+                    </div>
+
+                    <div class="project-links">
+                        <a href="https://github.com/thevenomv/OrbitRx-Propagation-Monitor" class="btn btn-outline" target="_blank">
+                            <i class="fab fa-github"></i> View Repository
+                        </a>
+                    </div>
                 </div>
+
             </div>
         </main>
     </div>
